@@ -1,0 +1,60 @@
+项目目录介绍：
+XLForum有个人主页、计科、论坛、恋爱吧、西林树五个大板块
+每一个目录（文件夹）对应一个模块
+    comment是评论区模块
+    cs是Computer Science 的所写，对应计科模块
+    friends是好友关系模块
+    forum是论坛模块
+    loveBar是恋爱吧模块
+    media与static都是存储静态资源的文件夹
+    myforum是项目的主目录，存放整个项目的配置文件
+    user是用户模块
+    xlTree是西林树模块
+    manage.py是管理整个项目的
+    .gitignore里的内容是git进行版本控制需要忽略的文件
+
+你最好掌握如下技能：
+  1.有一点python基础
+  2.会一点django或者flask
+  3.有一定的H5（html5、css、js）基础,熟悉django的模板标签（与flask类似）使用
+  4.有一定的mysql基础
+  5.会用git版本控制工具拉取、提交代码
+
+
+调试：
+1创建虚拟环境：
+    打开终端，cd到你要创建虚拟环境的目录
+    在终端执行：python -m venv py_venv
+    上面的操作会在当前目录下生成一个名为py_venv的目录
+    执行：./py_venv/Scripts/activate 即可激活这个虚拟环境
+    一般上还需要更新虚拟环境中的pip管理器
+    然后将requirements.txt 中的依赖包安装一下
+
+2配置数据库
+你需要先在myforum/settings.py找到(第81行)：
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': "forum",
+        "USER": "zzj2021",
+        "PASSWORD": '0605',
+    }
+}
+并将其配置成自己的数据库
+'NAME':使用的数据库名
+'USER':你书数据库用户（一般为root）
+'PASSWORD':你的密码
+你需要将数据库修改为自己本机已有的数据库，或者在自己的mysql中执行如下代码创建一个同名数据库
+drop database if exists forum;
+create database forum default charset utf8;
+
+3数据库迁移
+在这个manage.py同级目录下执行
+python manage.py makemigrations
+python manage.py migrate
+
+4启动项目
+在这个manage.py同级目录下执行
+python manage.py runserver
+然后在浏览器访问 127.0.0.1:8000 看到西林吧的主页就调试成功了
+
