@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>好友列表</title>
+</head>
+<body>
+    {% for friend in friends %}
+    <ul>
+        <li>{{ friend.username }}</li>
+        <li>{{ friend.remarkName }}</li>
+        <li></li>
+    </ul>
+    {% empty %}
+    还没有好友<a href="#">点击添加</a>
+    {% endfor %}
+</body>
+</html>

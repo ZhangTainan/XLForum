@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+{% extends 'cs/index.html' %}
+{% load static %}
+<html lang="zh-hans">
+<head>
+    <meta charset="UTF-8">
+    {% block title %}
+    <title>我的课程表</title>
+    {% endblock title %}
+    {% block style %}
+    <link rel="stylesheet" href="{% static 'css/classSchedule.css' %}">
+    {% endblock style %}
+
+
+</head>
+<body bgcolor="grey">
+    {% block content %}
+    <center><em>20计科课程表</em></center>
+    <table border="1px">
+        <tr>
+            <th>时间</th>
+            <th>星期一</th>
+            <th>星期二</th>
+            <th>星期三</th>
+            <th>星期四</th>
+            <th>星期五</th>
+            <th>星期六</th>
+            <th>星期天</th>
+        </tr>
+        
+        <tr>
+            <td>1,2节</td>
+            <td> </td>
+            <td> 英语</td>
+            <td> Java上机</td>
+            <td> </td>
+            <td> </td>
+            <td> 概率论</td>
+            <td> 概率论</td>
+        </tr>
+        
+        <tr>
+            <td>3,4节</td>
+            <td> UI设计</td>
+            <td> </td>
+            <td> </td>
+            <td> 英语</td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+        </tr>
+        
+        <tr>
+            <td>5,6节</td>
+            <td> 离散数学</td>
+            <td> 离散数学</td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+        </tr>
+        
+        <tr>
+            <td>7,8节</td>
+            <td> </td>
+            <td> Java理论</td>
+            <td> </td>
+            <td> 体育</td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+        </tr>
+        
+        <tr>
+            <td>9,10节</td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+        </tr>
+        
+        <tr>
+            <td>11,12节</td>
+            <td> UI上机</td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+        </tr>
+        
+
+
+    </table>
+    {% endblock content %}
+</body>
+</html>

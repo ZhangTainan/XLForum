@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加评论</title>
+</head>
+<body>
+<form action="{% url 'comment:add' title_id %}" method="post">
+    <textarea name="content" id="" cols="30" rows="10" placeholder="在此添加内容...">
+
+    </textarea>
+    <input type="submit" value="发表">
+    {% csrf_token %}
+</form>
+</body>
+</html>

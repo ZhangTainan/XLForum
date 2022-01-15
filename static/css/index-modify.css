@@ -1,0 +1,14 @@
+#modifyInfo,
+#changePassword{
+            text-align: center;
+            font-size: 20px;
+        }
+#modifyInfo{
+    color:red;
+}
+#changePassword{
+    color:blue
+}
+.modify {
+    text-align: center;
+}

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% block title %}
+    <title>恋爱吧</title>
+    {% endblock title %}
+    {% block bgimg %}
+    background-image: url("{% static 'imgs/LookingForward.png' %}");
+    {% endblock bgimg %}
+</head>
+<body>
+{% block content %}
+{% endblock content %}
+</body>
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册页面</title>
+    <!-- <link rel="icon" href="../imgs/swfu.jpg" type="image/x-icon"> -->
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+        }
+
+        body {
+            /* background: url("img/2.jpg") no-repeat center; */
+        }
+
+        .rg_layout {
+            width: 900px;
+            height: 500px;
+            border: 8px solid #eeeeee;
+            background-color: white;
+            /* 让div水平居中 */
+            margin: auto;
+            margin-top: 50px;
+            /* padding: 15px; */
+        }
+
+        .rg_left {
+            /* border: 1px solid red; */
+            float: left;
+            margin: 15px;
+        }
+
+        .rg_left p:first-child {
+            color: #fed026;
+            size: 20px;
+        }
+
+        .rg_left p:last-child {
+            color: #a6a6a6;
+            size: 20px;
+        }
+
+        .rg_center {
+            width: 450px;
+
+            /* border: 1px solid red; */
+            float: left;
+        }
+
+        .rg_right {
+            /* border: 1px solid red; */
+            float: right;
+        }
+
+        .rg_right p:first-child {
+            /* color: #a6a6a6; */
+            font-size: 15px;
+        }
+
+        .rg_right p a {
+            color: pink;
+        }
+
+        .td_left {
+            width: 100px;
+            text-align: right;
+            height: 45px;
+            color: #a6a6a6;
+        }
+
+        .td_right {
+            padding-left: 50px;
+            color: #a6a6a6;
+        }
+
+        #username,
+        #password,
+        #cf_password,
+        #email,
+        #name,
+        #tel {
+            width: 251px;
+            height: 32px;
+            border: 1px solid #a6a6a6;
+            /* 设置边框圆角 */
+            border-radius: 5px;
+            padding-left: 10px;
+
+        }
+
+        #birthday {
+            width: 60px;
+            height: 32px;
+            border: 1px solid #a6a6a6;
+            /* 设置边框圆角 */
+            border-radius: 5px;
+            padding-left: 10px;
+
+        }
+
+        #checkcode {
+            width: 150px;
+            height: 32px;
+            border: 1px solid #a6a6a6;
+            border-radius: 5px;
+            padding-left: 10px;
+
+        }
+
+        #img_check {
+            height: 32px;
+            /* 验证码图片垂直居中 */
+            vertical-align: middle;
+        }
+
+        #btn_sub {
+            width: 150px;
+            height: 40px;
+            background-color: #ffd026;
+            border: 1px solid #a6a6a6;
+        }
+
+        .check_mes {
+            font-size: small;
+            color: red;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            var dataform = document.getElementById('userinfo');
+            var username = document.getElementById('username');
+            var password = document.getElementById('password');
+            var cf_password = document.getElementById('cf_password');
+            var email = document.getElementById('email');
+            // var gender = document.getElementById('gender').value;
+            // var age = document.getElementById('age').value;
+            var btn_sub = document.getElementById('btn_sub');
+            var username_span = document.getElementById('username_span');
+            var password_span = document.getElementById('password_span');
+            var cf_password_span = document.getElementById('cf_password_span');
+            var email_span = document.getElementById('email_span');
+            // var gender_span = document.getElementById('gender_span');
+            // var age_sapn = document.getElementById('age_sapn');
+            var regexp_username = /^[a-zA-Z][a-zA-Z0-9_]{7,15}$/;
+            var regexp_password = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$/;
+            var regexp_email = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+            console.log(regexp_username.test('abcddefg3'));
+            console.log(regexp_password.test('ABGASDHdsf34.'));
+            console.log(regexp_email.test('123@qq.com'));
+            console.log(username);
+            function check_username() {
+                if (username.value == '') {
+                    username_span.innerText = '用户名不能为空！';
+                }
+                else if (regexp_username.test(username.value)) {
+                    username_span.innerText = '';
+                }
+                else {
+                    username_span.innerText = "用户名不合法！";
+                }
+
+
+            }
+            function check_password() {
+                if (password.value == '') {
+                    password_span.innerText = '密码不能为空！';
+                }
+                else if (regexp_password.test(password.value)) {
+                    password_span.innerText = '';
+                }
+                else {
+                    password_span.innerText = '密码太简单！';
+
+                }
+            }
+
+            function check_cf_password() {
+                if (cf_password.value == '') {
+                    cf_password_span.innerText = '请输入确认密码!';
+                }
+                else if (password.value != cf_password.value) {
+                    cf_password_span.innerText = '两次密码不一致!';
+                }
+                else {
+                    cf_password_span.innerText = '';
+                }
+            }
+            function check_email() {
+                if (regexp_email.test(email.value)) {
+                    email_span.innerText = '';
+                }
+                else {
+                    email_span.innerText = '邮箱不合法！';
+                }
+            }
+            function check_form() {
+                check_username();
+                check_password();
+                check_cf_password();
+                check_email();
+                if (username_span.innerText == '' && password_span.innerText == ''
+                    && cf_password_span.innerText == '' && email_span.innerText == '') {
+                    dataform.submit();
+                }
+            }
+            username.onblur = check_username;
+            password.onblur = check_password;
+            cf_password.onblur = check_cf_password;
+            email.onblur = check_email;
+            btn_sub.onclick = check_form;
+
+
+        }
+    </script>
+</head>
+
+<body>
+    <div class="rg_layout">
+        <div class="rg_left">
+            <p>新用户注册</p>
+            <p>USER REGISTER</p>
+        </div>
+        <div class="rg_center">
+            <div class="rg_form">
+                <!-- 定义表单 form-->
+                <form id='userinfo' action="/user/register" method="post">
+                    <table>
+                        <tr>
+                            <td class="td_left"><label for="usename"></label> 用户名</td>
+                            <td class="td_right"><input type="text" name="username" id="username" placeholder="请输入用户名(字母开头)">
+                                <p><span class='check_mes' id='username_span'></span></p>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td class="td_left"><label for="password"></label> 密码</td>
+                            <td class="td_right"><input type="password" name="password" id="password"
+                                    placeholder="请输入密码">
+                                <p><span class='check_mes' id='password_span'></span></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="td_left"><label for="password"></label> 确认密码</td>
+                            <td class="td_right"><input type="password" name="cf_password" id="cf_password"
+                                    placeholder="请再次输入密码">
+                                <p><span class='check_mes' id='cf_password_span'></span></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="td_left"><label for="email"></label> email</td>
+                            <td class="td_right"><input type="text" name="email" id="email" placeholder="请输入email">
+                                <p><span class='check_mes' id='email_span'></span></p>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td class="td_left"><label for="name"></label> 昵称</td>
+                            <td class="td_right"><input type="text" name="nickname" id="name" placeholder="宝宝巴氏" value="宝宝巴士"
+                                    maxlength="10"></td>
+                        </tr>
+                        <tr>
+                            <td class="td_left"><label>性别</label></td>
+                            <td class="td_right"><input type="radio" name="gender" value="M">男
+                                <input type="radio" name="gender" value="F" checked>女
+                            </td>
+                            <td><span class='message' id='gender_span'></span></td>
+
+                        </tr>
+                        <tr>
+                            <td class="td_left"><label for="b">年龄</label></td>
+                            <td class="td_right"><input type="number" name="age" id="birthday" value="18">
+                            </td>
+                            <td><span class='message' id='age_sapn'></span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="center"><input type="button" id="btn_sub" value="注册"></td>
+                        </tr>
+                    </table>
+                    {% csrf_token %}
+                </form>
+            </div>
+        </div>
+        <div class="rg_right">
+            <p>已有账号?&nbsp; <a href="/user/login">&nbsp;立即登录&nbsp;</a></p>
+        </div>
+    </div>
+</body>
+
+</html>

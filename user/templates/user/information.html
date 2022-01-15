@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% if isFriend %}
+    <li>
+        {{ user.username }}
+    </li>
+    <li>
+        {{ user.nickname }}
+    </li>
+    <li>
+        {{ user.gender }},{{ user.age }}
+    </li>
+    <li>
+        {{ user.email }}
+    </li>
+    <p><a href="#">删除好友</a></p>
+    {% else %}
+    <li>
+        {{ user.username }}
+    </li>
+    <li>
+        {{ user.nickname }}
+    </li>
+    <li>
+        {{ user.gender }},{{ user.age }}
+    </li>
+    <p><a href="{% url 'friends:add_friend' user.username %}">添加ta为好友</a></p>
+    {% endif %}
+</body>
+</html>

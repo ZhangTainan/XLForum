@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+
+<head>
+    <meta charset="UTF-8">
+    <title>验证消息</title>
+</head>
+
+<body>
+    <form action="" method="post" id="form">
+        <input type="text" name="username_A" readonly hidden>
+        <input type="text" name="username_B" readonly hidden>
+        <textarea name="content" id="" cols="30" rows="10">我是。。。,希望添加你为好友！</textarea>
+        <input type="submit" value="发送">
+        {% csrf_token %}
+
+    </form>
+</body>
+
+</html>

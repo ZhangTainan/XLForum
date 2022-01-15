@@ -1,0 +1,30 @@
+table {
+border: 1px solid grey;
+margin: 0 auto;
+border-collapse: collapse;
+font-size: 150%;
+border-radius: 20px;
+overflow: hidden;
+
+
+}
+td{
+width: 120px;
+height: 60px;
+text-align: center;
+line-height: 60px;
+}
+th{
+border:1px solid;
+background-color: wheat;
+height: 60px;
+}
+tr{
+background-color: lightblue;
+}
+center{
+    margin-top: 70px;
+    font-size: 200%;
+    color:violet;
+
+}

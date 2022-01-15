@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body>
+<ul>
+    <li><h3>{{ title }}</h3></li>
+    <li>{{ content }}</li>
+    <li><ol>
+        {% for comment in comments %}
+            <li>{{ comment.content }}<br>@<a href="{% url 'user:information' comment.user.username %}">{{ comment.user.nickname }}</a>&nbsp;时间:{{ comment.created_time }}</li>
+        {% empty %}
+        还没有评论快去添加吧！
+        {% endfor %}
+    </ol></li>
+    <li><a href="{% url 'comment:add' id %}">添加一条评论</a></li>
+    {% if is_author %}
+    <li>
+        <a href="{% url 'forum:update' id %}">修改该话题</a>
+        <a href="{% url 'forum:delete' id %}">删除该话题</a>
+    </li>
+    {% endif %}
+</ul>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录</title>
+    <link rel="icon" href="../imgs/swfu.jpg" type="image/x-icon">
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: url("img/2.jpg") no-repeat center;
+        }
+
+        .rg_layout {
+            width: 500px;
+            height: 300px;
+            border: 8px solid #eeeeee;
+            background-color: white;
+            /* 让div水平居中 */
+            margin: auto;
+            margin-top: 100px;
+            /* padding: 15px; */
+        }
+
+        .rg_left {
+            /* border: 1px solid red; */
+            float: left;
+            margin: 15px;
+        }
+
+        .rg_left p:first-child {
+            color: #fed026;
+            size: 20px;
+        }
+
+        .rg_left p:last-child {
+            color: #a6a6a6;
+            size: 20px;
+        }
+
+        .rg_center {
+            width: 450px;
+
+            /* border: 1px solid red; */
+            float: left;
+        }
+
+        .rg_right {
+            /* border: 1px solid red; */
+            float: right;
+        }
+
+        .rg_right p:first-child {
+            /* color: #a6a6a6; */
+            font-size: 15px;
+        }
+
+        .rg_right p a {
+            color: pink;
+        }
+
+        .td_left {
+            width: 100px;
+            text-align: right;
+            height: 45px;
+            color: #a6a6a6;
+        }
+
+        .td_right {
+            padding-left: 50px;
+            color: #a6a6a6;
+        }
+
+        #username,
+        #password,
+        #cf_password,
+        #email,
+        #name,
+        #tel {
+            width: 251px;
+            height: 32px;
+            border: 1px solid #a6a6a6;
+            /* 设置边框圆角 */
+            border-radius: 5px;
+            padding-left: 10px;
+
+        }
+
+        #birthday {
+            width: 60px;
+            height: 32px;
+            border: 1px solid #a6a6a6;
+            /* 设置边框圆角 */
+            border-radius: 5px;
+            padding-left: 10px;
+
+        }
+
+        #checkcode {
+            width: 150px;
+            height: 32px;
+            border: 1px solid #a6a6a6;
+            border-radius: 5px;
+            padding-left: 10px;
+
+        }
+
+        #img_check {
+            height: 32px;
+            /* 验证码图片垂直居中 */
+            vertical-align: middle;
+        }
+
+        #btn_sub {
+            width: 150px;
+            height: 40px;
+            background-color: #ffd026;
+            border: 1px solid #a6a6a6;
+            margin-left: 60px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="rg_layout">
+        <div class="rg_left">
+            <p>登录</p>
+            <p>USER LOGIN</p>
+        </div>
+        <div class="rg_center">
+            <div class="rg_form">
+                <!-- 定义表单 form-->
+                <form action="/user/login" method="post">
+                    <table>
+                        <tr>
+                            <td class="td_left"><label for="usename"></label> 用户名</td>
+                            <td class="td_right"><input type="text" name="username" id="username" value="{{ username }}"
+                                    placeholder="请输入用户名">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="td_left"><label for="password"></label> 密码</td>
+                            <td class="td_right"><input type="password" name="password" id="password"
+                                    placeholder="请输入密码"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="center"><input type="submit" id="btn_sub" value="登录"></td>
+                            <td colspan="2" align="center"><a href="/user/register">注册</a></td>
+                        </tr>
+                    </table>
+                    {% csrf_token %}
+                </form>
+            </div>
+        </div>
+        <div class="rg_right">
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,30 @@
+*{
+        margin: 0;
+        padding: 0;
+    }
+ul {
+    width: 100%;
+    background-color: lightblue;
+    list-style: none;
+    text-decoration: none;
+
+}
+
+li {
+    width: 252px;
+    height: 60px;
+    display: inline-block;
+    font-size: 20px;
+    text-align: center;
+    line-height: 60px;
+    border: 1px;
+
+}
+
+a {
+    text-decoration: none;
+}
+li:hover{
+    font-size: 150%;
+    background-color: lightgreen;
+}

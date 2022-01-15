@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>更新内容</title>
+    <style>
+        p {
+            text-align: center;
+        }
+
+        #title {
+            width: 200px;
+            height: 30px;
+        }
+
+        #content {
+            width: 500px;
+            height: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <form action="{% url 'forum:update' item.id %}" method="post">
+        <p><input id='title' type="text" name="title" maxlength="100" value="{{ item.title }}" maxlength="20" readonly></p>
+        <p><textarea name="content" id="content" cols="30" rows="10" ></textarea></p>
+        <p><input type="submit" value="提交"></p>
+
+        {% csrf_token %}
+    </form>
+</body>
+<script>
+        document.getElementById("content").value="{{ item.content }}";
+ </script>
+
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="zh-hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block title %}
+    <title>西林吧</title>
+    {% endblock title %}
+    {% block icon %}
+    <link rel="icon" href="{% static 'imgs/base_icon.png' %}">
+    {% endblock icon %}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+
+        }
+
+        body {
+            height: 200vh;
+            /* background-image: url('../imgs/swfu.jpg');
+            background-size: 100%; */
+
+        }
+
+        .tou {
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 25px 100px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.5s;
+        }
+
+        .logo {
+            position: relative;
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            color: rgb(28, 36, 148);
+        }
+
+        .logo::before {
+            content: '';
+            position: absolute;
+            left: -50px;
+            top: -15px;
+            width: 50px;
+            height: 50px;
+            background-image: url(logo.png);
+            background-size: 100%;
+        }
+
+        .biao {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            list-style: none;
+
+        }
+
+        .biao li {
+            position: relative;
+        }
+
+        .biao a {
+            position: relative;
+            margin: 0 10px;
+            font-size: 18px;
+            font-family: 'fangsong';
+            font-weight: bold;
+            color: yellow;
+            text-decoration: none;
+
+        }
+
+        .bian {
+            padding: 15px 100px;
+            background-color: grey;
+        }
+
+        .bian,
+        .tou.bian a {
+            color: rgb(252, 247, 247);
+        }
+        .logo{
+            color: tomato;
+        }
+
+
+        /*  背景图样式 */
+        .bjimg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            min-width: 1000px;
+            z-index: -10;
+            zoom: 1;
+            background-color: #fff;
+            {% block bgimg %}
+            background-image: url("{% static 'imgs/swfu.jpg' %}");
+            {% endblock bgimg %}
+            background-repeat: no-repeat;
+            background-size: cover;
+            -webkit-background-size: cover;
+            -o-background-size: cover;
+            background-position: center 0;
+        }
+        #welcome{
+            color:green
+        }
+         body {
+            padding: 0;
+            margin: 0 auto;
+        }
+
+        #footer {
+            height: 40px;
+            line-height: 40px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            background: rgb(3, 3, 3,0.5);
+            color: #fff;
+            font-family: Arial;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        .content {
+            height: 1800px;
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+    {% block style %}
+    <style>
+        #intro_center{
+            margin-top:200px;
+            color:rgb(255,60,40);
+            font-size:30px;
+        }
+    </style>
+    {% endblock style %}
+</head>
+
+<body>
+    <!-- 背景图 -->
+    <div class="bjimg"></div>
+
+    <!--  导航栏 -->
+    <div class="tou">
+        <sapn class="logo"> 西林吧</sapn>
+
+        <ul class="biao">
+            <li><a href="{% url 'user:index' %}">个人主页</a></li>
+            <li><a href="{% url 'cs:index' %}">计科</a></li>
+            <li><a href="{% url 'forum:index' %}">论坛</a></li>
+            <li><a href="{% url 'loveBar:index' %}">恋爱吧</a></li>
+            <li><a href="{% url 'xlTree:index' %}">西林树</a></li>
+            {% if request.session.userName %}
+            <em id="welcome">欢迎{{ request.session.userName }}!</em><a href="{% url 'user:logout' %}">注销</a></li>
+            {% else %}
+            <li><a href="{% url 'user:login' %}">登录</a><a href="{% url 'user:register' %}">注册</a></li>
+            {% endif %}
+
+
+        </ul>
+    </div>
+    {% block content %}
+    <center id="intro_center">
+        <p class="introduction"><strong>西林吧</strong>是一款基于django框架的web网站，致力于服务西南林业大学学生</p>
+        <p class="introduction"><strong>Why?</strong>在这里你可以,学习、交友、娱乐</p>
+    </center>
+    {% endblock content %}
+     <div id="footer">
+        作者：zzj
+        团队:西林计科2020级项目小组
+        时间：2021-12-04
+        描述：西林吧&nbsp;
+        CopyRight@copy2021 </div>
+</body>
+    <script>
+        window.addEventListener('scroll', function () {
+            let tou = document.querySelector('.tou');
+
+
+            /*  tou.classList.toggle("bian",window.scrollY>0); */
+            if (window.scrollY > 0) {
+                tou.classList.add("bian");
+            } else {
+                tou.classList.remove("bian");
+            }
+        })
+    </script>
+
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>好友列表</title>
+</head>
+<body>
+    <ul>
+        {% for friend in friends %}
+        <li><a href="{% url 'user:information' friend.username %}">{{ friend.username }}({{ friend.remarkName }})</a></li>
+        {% empty %}
+        <p>还没有好友</p>
+        {% endfor %}
+    </ul>
+</body>
+</html>

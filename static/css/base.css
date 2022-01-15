@@ -1,0 +1,7 @@
+body {
+{% load static %}
+background-color:green;
+}
+p{
+color:red;
+}

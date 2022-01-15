@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>计科</title>
+    {% block bgimg %}
+    background-image: url("{% static 'imgs/cs.png' %}");
+    {% endblock bgimg %}
+</head>
+<body>
+{% block content %}
+<br><br><br><br>
+<center><h3>欢迎来到计算计科学与技术的世界</h3></center>
+<center><a href="{% url 'cs:classSchedule' %}">查看课程表</a></center>
+<center><a href="#">相册</a></center>
+<center><a href="{%url 'cs:javaDocumentation' %}">java提问指南</a></center>
+<center><a href="{%url 'cs:javaExam' %}">java考试指南</a></center>
+<center><a href="#">其他</a></center>
+{% endblock content %}
+</body>
+</html>

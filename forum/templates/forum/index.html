@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% block title %}
+    <title>论坛</title>
+    {% endblock title %}
+    {% block bgimg %}
+    background-image: url("{% static 'imgs/forum.png' %}");
+    {% endblock bgimg %}
+    {% block style %}
+    <style>
+        #forum_content{
+        margin-top:70px;
+        margin:0 auto;
+       }
+    </style>
+    {% endblock style %}
+
+</head>
+<body>
+{% block content %}
+<br><br><br><br><br><br>
+<center><em><strong>欢迎来到西林论坛！</strong></em>&nbsp;&nbsp;&nbsp;
+    <a href="{% url 'forum:add' %}">添加话题</a></center>
+<table id="forum_content">
+    <tr>
+        <th>话题</th>
+        <th>发布者</th>
+        <th>发布时间</th>
+        <th>更新时间</th>
+    </tr>
+    {% for item in items %}
+    <tr>
+        <td><a href="{% url 'forum:detail' item.id %}">{{ item.title }}</a></td>
+        <td>{{ item.user.nickname }}</td>
+        <td>{{ item.created_time }}</td>
+        <td>{{ item.updated_time }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="3">还没有话题哦</td>
+    </tr>
+    {% endfor %}
+
+</table>
+{% endblock content %}
+</body>
+</html>
