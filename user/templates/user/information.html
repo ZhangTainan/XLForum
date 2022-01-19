@@ -18,7 +18,7 @@
     <li>
         {{ user.email }}
     </li>
-    <p><a href="#">删除好友</a></p>
+    <p><a href="{% url 'friends:delete_friend' user.username %}">删除好友</a></p>
     {% else %}
     <li>
         {{ user.username }}

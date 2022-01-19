@@ -1,16 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>好友列表</title>
 </head>
+
 <body>
+    
     <ul>
         {% for friend in friends %}
-        <li><a href="{% url 'user:information' friend.username %}">{{ friend.username }}({{ friend.remarkName }})</a></li>
+        <li>
+            <a href="{% url 'user:information' friend.username %}">{{ friend.username }}({{ friend.remarkName }})</a>
+            <a href="#"> 修改备注</a>
+            <a href="{% url 'friends:delete_friend' friend.username %}"> 删除</a>
+        </li>
         {% empty %}
         <p>还没有好友</p>
         {% endfor %}
     </ul>
 </body>
+
 </html>

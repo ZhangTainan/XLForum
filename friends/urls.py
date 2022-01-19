@@ -1,4 +1,6 @@
 from django.urls import path
+
+from forum.views import delete
 from .views import *
 
 app_name = 'friends'
@@ -7,4 +9,5 @@ urlpatterns = [
     path('add_friend/<str:username>', add_friend, name='add_friend'),
     path('agree',agree,name="agree"),
     path('reject',reject,name='reject'),
+    path('delete_friend/<str:username>', delete_friend, name='delete_friend'),
 ]

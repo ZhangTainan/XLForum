@@ -1,4 +1,5 @@
 from django.shortcuts import render, HttpResponseRedirect, HttpResponse
+from django.http import Http404
 
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
@@ -15,9 +16,9 @@ def friends_list(request):
 
     # friends=FriendRelationship.objects.filter(Q(FriendRelationship.username_A=='username'
     #                                             | Q(FriendRelationship.username_B)))
-    friends = [{"username": ship.username_B, "remarkName": ship.remark_name_B} for ship in
+    friends = [{"username": fr.username_B, "remarkName": fr.remark_name_B} for fr in
                FriendRelationship.objects.filter(username_A=username)]
-    friends += [{"username": ship.username_A, "remarkName": ship.remark_name_A} for ship in
+    friends += [{"username": fr.username_A, "remarkName": fr.remark_name_A} for fr in
                 FriendRelationship.objects.filter(username_B=username)]
     print(friends)
     return render(request, 'friends/friends_list.html', locals())
@@ -74,7 +75,26 @@ def reject(request):
         # TODO:添加回馈拒绝信息
         return HttpResponse(200)
 
+# TODO:增加通过搜索用户名添加好友的方式
 
 @check_login
-def delete_friend(request):
-    pass
+def delete_friend(request,username):
+    # 获取session中的当前用户名和参数用户名
+    # 在数据库中删除这对好友关系
+    username_myself=request.session.get('userName')
+    print(username)
+    try:
+        fr=FriendRelationship.objects.get(username_A=username_myself,username_B=username)
+        fr.delete()
+        return HttpResponseRedirect('/friends/friends_list')
+    except:
+        try:
+            fr=FriendRelationship.objects.get(username_B=username_myself,username_A=username)
+            fr.delete()
+            return HttpResponseRedirect('/friends/friends_list')
+
+        except:
+            return render(request,'404.html')
+
+
+

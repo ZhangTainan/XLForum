@@ -11,6 +11,10 @@
 .idea/*
 .iml
 
+# vscode文件
+.vscode
+.vscode/*
+
 # sql文件
 *.sqlite3
 
