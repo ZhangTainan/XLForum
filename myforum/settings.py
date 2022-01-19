@@ -132,7 +132,7 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = (BASE_DIR.joinpath("static"),)
 print(str(BASE_DIR))
-STATIC_ROOT="/home/zzj2021/myforum_static/"#以字符串形式写出完整目录
+STATIC_ROOT="/home/zzj2021/myforum_static/" #以字符串形式写出完整目录
 # print(STATIC_ROOT)
 
 
