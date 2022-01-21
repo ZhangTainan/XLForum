@@ -45,7 +45,8 @@ class ValidationMessages(models.Model):
     receiver = models.ForeignKey(UserInfo, related_name='receiver', on_delete=models.CASCADE)
     content = models.TextField(verbose_name='消息')
     send_time = models.DateTimeField(verbose_name='发送时间', auto_now_add=True)
-    isAgreed = models.BooleanField(verbose_name='是否同意', default=False, choices=((False, '不同意'), (True, '同意')))
+    isAgreed = models.CharField(verbose_name='是否同意',max_length=1, default='W',
+                                choices=(('W', '等待'), ('Y', '同意'),('N','拒绝')))
 
     # 根据是否同意确定是否成为好友关系
     class Meta:

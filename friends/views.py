@@ -44,21 +44,29 @@ def agree(request):
     if request.method == "POST":
         data = request.POST
         inform_id = data.get('id')
-        sender = data.get("sender")
-        receiver = data.get("receiver")
+        sender = UserInfo.objects.get(username=data.get("sender"))
+        receiver = UserInfo.objects.get(username=data.get("receiver"))
 
-        # 删除这条验证消息
-        ValidationMessages.objects.get(id=inform_id).delete()
+        '''
+            该条验证消息对接收者已经没有意义
+            讲该条验证消息的是否同意设置为Y,修改验证消息为“xxx同意了你的好友请求”,
+            互换接受者和发送者身份,这样发送者就会收到来自接收者的回馈消息
+        '''
+        val_mes = ValidationMessages.objects.get(id=inform_id)
+        val_mes.isAgreed = 'Y'
+        val_mes.content = f"{receiver.username}通过了你的好友验证！"
+        val_mes.sender, val_mes.receiver = receiver, sender
+        val_mes.save()
 
         # 若fr关系表中没有这对关系则在fr表中建立sender和receiver的朋友关系
         try:
-            FriendRelationship.objects.get(username_A=sender, username_B=receiver)
+            FriendRelationship.objects.get(username_A=sender.username, username_B=receiver.username)
         except:
             try:
-                FriendRelationship.objects.get(username_A=receiver, username_B=sender)
+                FriendRelationship.objects.get(username_A=receiver.username, username_B=sender.username)
             except:
-                FriendRelationship.objects.create(username_A=sender, username_B=receiver,
-                                                  remark_name_A=sender, remark_name_B=receiver)
+                FriendRelationship.objects.create(username_A=sender.username, username_B=receiver.username,
+                                                  remark_name_A=sender.username, remark_name_B=receiver.username)
         return HttpResponse(200)
 
 
@@ -67,34 +75,48 @@ def reject(request):
     if request.method == "POST":
         data = request.POST
         inform_id = data.get('id')
-        sender = data.get("sender")
-        receiver = data.get("receiver")
+        sender = UserInfo.objects.get(username=data.get("sender"))
+        receiver = UserInfo.objects.get(username=data.get("receiver"))
 
-        # 把该条验证消息删除，并回馈发送者”拒绝“的信息
-        ValidationMessages.objects.get(id=inform_id).delete()
-        # TODO:添加回馈拒绝信息
+        '''
+            该条验证消息对接收者已经没有意义
+            讲该条验证消息的是否同意设置为N,修改验证消息为“xxx婉拒了你的好友请求”,
+            互换接受者和发送者身份,这样发送者就会收到来自接收者的回馈消息
+        '''
+        val_mes = ValidationMessages.objects.get(id=inform_id)
+        val_mes.isAgreed = 'N'
+        val_mes.content = f"{receiver.username}婉拒了你的好友请求！"
+        val_mes.sender, val_mes.receiver = receiver, sender
+        val_mes.save()
+        print('123')
+
         return HttpResponse(200)
 
-# TODO:增加通过搜索用户名添加好友的方式
+
+@csrf_exempt
+def del_val_mes(request):
+    if request.method == "POST":
+        val_mes_id = request.POST.get('id')
+        ValidationMessages.objects.get(id=val_mes_id).delete()
+        # 返回一个响应防止报错
+        return HttpResponse(200)
+
 
 @check_login
-def delete_friend(request,username):
+def delete_friend(request, username):
     # 获取session中的当前用户名和参数用户名
     # 在数据库中删除这对好友关系
-    username_myself=request.session.get('userName')
+    username_myself = request.session.get('userName')
     print(username)
     try:
-        fr=FriendRelationship.objects.get(username_A=username_myself,username_B=username)
+        fr = FriendRelationship.objects.get(username_A=username_myself, username_B=username)
         fr.delete()
         return HttpResponseRedirect('/friends/friends_list')
     except:
         try:
-            fr=FriendRelationship.objects.get(username_B=username_myself,username_A=username)
+            fr = FriendRelationship.objects.get(username_B=username_myself, username_A=username)
             fr.delete()
             return HttpResponseRedirect('/friends/friends_list')
 
         except:
-            return render(request,'404.html')
-
-
-
+            return render(request, '404.html')

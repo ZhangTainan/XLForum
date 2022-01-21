@@ -9,5 +9,7 @@ urlpatterns = [
     path('modifyUserInfo',modify,name='modify'),
     path('changePassword',changePassword,name='changePassword'),
     path('information/<str:username>/',information,name='information'),
-    path('inform',inform,name='inform'),
+    path('notifications',notifications,name='notifications'),
+    path('val_mes',val_mes,name='val_mes'),
+    path('search_user',search_user,name='search_user'),
 ]

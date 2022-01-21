@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect
-
+import json
 # Create your views here.
 from .models import UserInfo
 from hashlib import md5
@@ -78,6 +78,10 @@ def logout(request):
 def index(request):
     username = request.session['userName']
     user = UserInfo.objects.get(username=username)
+    if user.gender == 'M':
+        user.gender = '男'
+    else:
+        user.gender = '女'
     return render(request, 'user/index.html', locals())
 
 
@@ -125,12 +129,38 @@ def information(request, username):
         return HttpResponseRedirect('/user/index')
     # 把用户信息查出来返回前端
     user = UserInfo.objects.get(username=username)
+    if user.gender == 'M':
+        user.gender = '男'
+    else:
+        user.gender = '女'
     return render(request, 'user/information.html', locals())
 
 
 @check_login
-def inform(request):
+def notifications(request):
+    return render(request, 'user/notifications.html')
+
+
+@check_login
+def val_mes(request):
     username = request.session['userName']
     user = UserInfo.objects.get(username=username)
     informs = ValidationMessages.objects.filter(receiver=user)
-    return render(request, 'user/inform.html', locals())
+    return render(request, 'user/val_mes.html', locals())
+
+
+# 增加搜索用户
+@check_login
+def search_user(request):
+    print(request.GET)
+    print(type(request.GET))
+    username=request.GET.get('username')
+    user=UserInfo.objects.get(username=username)
+    data={
+        "username":username,
+        "nickname":user.nickname,
+        "gender":'男' if user.gender=='M' else '女' ,
+        "age":user.age,
+    }
+    print(json.dumps(data,ensure_ascii=False))
+    return HttpResponse(json.dumps(data,ensure_ascii=False))
