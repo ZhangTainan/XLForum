@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <title>好友列表</title>
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
 </head>
 
 <body>
@@ -14,7 +17,77 @@
             <a href="{% url 'user:information' friend.username %}">{{ friend.username }}({{ friend.remarkName }})</a>
             <a href="#"> 修改备注</a>
             <a href="{% url 'friends:delete_friend' friend.username %}"> 删除</a>
+            <a class="btn btn-info" id='dialogue-{{ friend.username }}' data-bs-toggle="modal"
+                data-bs-target="#myModal-{{ friend.username }}">
+              发消息
+            </a>
         </li>
+        <div class="modal" id="myModal-{{ friend.username }}">
+            <div class="modal-dialog modal-dialog-scrollable modal-l">
+                <div class="modal-content">
+        
+                    <!-- 模态框头部 -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">好友聊天框<small class='text-secondary'>({{ friend.remarkName }})</small></h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" id='close-{{ friend.username }}'></button>
+                    </div>
+        
+                    <!-- 模态框内容 -->
+                    <div class="modal-body" id="detail-{{ friend.username }}">
+        
+                    </div>
+        
+                    <!-- 模态框底部 -->
+                    <div class="modal-footer">
+                        <input type="text" name='message' id="message-{{ friend.username }}" class=" form-control mt-1"
+                            placeholder="在此输入消息" style="width:80%;height:50px">
+                        <button type="button" class="btn btn-danger" id="send-{{ friend.username }}">发送</button>
+                    </div>
+        
+                </div>
+            </div>
+        </div>
+        
+        <script>
+
+            $("#dialogue-{{ friend.username }}").bind("click", function () {
+                // 先清空原来的数据,防止重复渲染
+                $("#detail-{{ friend.username }}").html("");
+                var username = "{{ friend.username }}";
+                $.get("{% url 'friends:detail_dialogues' %}", { "username": username }, function (res) {
+                    var data = $.parseJSON(res);
+                    if ($.isEmptyObject(data)) {
+                        $("#detail-{{ friend.username }}").html("<h4 class='text-warning'>还没有消息记录哦！</h4>");
+                    }
+                    for (i = 0; i < data.length; i++) {
+                        sender = "<span class='h5 mr-3'>" + data[i].username + "</span>";
+                        send_time = "&nbsp;&nbsp;&nbsp;&nbsp;<span class='small secondary'>" + data[i].send_time + "</span>";
+
+                        if (data[i].username == username) {
+                            message = "<div class='mt-1 mb-4 text-primary'>" + data[i].message + "</div>";
+                        }
+                        else {
+                            message = "<div class='mt-1 mb-4 text-success'>" + data[i].message + "</div>";
+                        }
+                        $("#detail-{{ friend.username }}").append(
+                            sender + send_time + message
+                        );
+                    }
+                });
+            });
+
+            $("#send-{{ friend.username }}").bind('click', function () {
+                var message = $("#message-{{ friend.username }}").val();
+                var sender_name = "{{ request.session.userName }}";
+                var receiver_name = "{{ friend.username }}";
+                // 发送post请求给后端,传递上述参数
+                $.post("{% url 'friends:send_message' %}", { "send_name": sender_name, "receiver_name": receiver_name, "message": message }, function (res) {
+
+                    $("#dialogue-{{ friend.username }}").click();
+                })
+            })
+
+        </script>
         {% empty %}
         <p>还没有好友</p>
         {% endfor %}

@@ -6,7 +6,7 @@ from user.views import check_login
 def test(request):
     # render(request,"")
     # return render(request, 'firstTest/test.html')
-    return HttpResponse(200)
+    return HttpResponse(request.GET.get('a'))
 
 
 def base(request):

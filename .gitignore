@@ -29,3 +29,6 @@
 
 # 本地配置
 local.properties
+
+# 测试文件
+/firstTest/

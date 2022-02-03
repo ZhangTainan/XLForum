@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>聊天消息</title>
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+
+</head>
+
+<body>
+    {% for dialogue in dialogues %}
+
+    <div class="container mt-3 btn" style="width:50%" id='dialogue-{{ dialogue.user }}' data-bs-toggle="modal"
+        data-bs-target="#myModal-{{ dialogue.user }}">
+        <div class="card bg-warning">
+            <div class="card-header">{{ dialogue.user }}</div>
+            <div class="card-body">{{ dialogue.message }}</div>
+            <div class="card-footer">{{ dialogue.send_time }}</div>
+        </div>
+    </div>
+
+    <!-- 模态框做聊天框-->
+    <div class="modal" id="myModal-{{ dialogue.user }}">
+        <div class="modal-dialog modal-dialog-scrollable modal-l">
+            <div class="modal-content">
+
+                <!-- 模态框头部 -->
+                <div class="modal-header">
+                    <h4 class="modal-title">好友聊天框<small>({{ dialogue.user }})</small></h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" id='close-{{ dialogue.user }}'></button>
+                </div>
+
+                <!-- 模态框内容 -->
+                <div class="modal-body" id="detail-{{ dialogue.user }}">
+
+                </div>
+
+                <!-- 模态框底部 -->
+                <div class="modal-footer">
+                    <input type="text" name='message' id="message-{{ dialogue.user }}" class=" form-control mt-1"
+                        placeholder="在此输入消息" style="width:80%;height:50px">
+                    <button type="button" class="btn btn-danger" id="send-{{ dialogue.user }}">发送</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+       
+        $("#dialogue-{{ dialogue.user }}").bind("click", function () {
+            // 先清空原来的数据,防止重复渲染
+            $("#detail-{{ dialogue.user }}").html("");
+            var username = "{{ dialogue.user }}";
+            // 发送get请求已有对话记录
+            $.get("{% url 'friends:detail_dialogues' %}", { "username": username }, function (res) {
+                var data = $.parseJSON(res);
+               
+                if ($.isEmptyObject(data)) {
+                    $("#detail-{{ dialogue.user }}").html("<h2>还没有消息记录哦！</h2>");
+                }
+                for (i = 0; i < data.length; i++) {
+                    sender= "<span class='h5 mr-3'>" + data[i].username + "</span>";
+                    send_time= "&nbsp;&nbsp;&nbsp;&nbsp;<span class='small secondary'>" + data[i].send_time + "</span>";
+
+                    if (data[i].username==username) {
+                        message= "<div class='mt-1 mb-4 text-primary'>" + data[i].message + "</div>";
+                    }
+                    else{
+                        message = "<div class='mt-1 mb-4 text-success'>" + data[i].message + "</div>";
+                    }
+                    // 将消息记录逐条添加到模态框内容里
+                    $("#detail-{{ dialogue.user }}").append(
+                        sender+send_time+message
+                    );
+                }
+            });
+        });
+      
+        $("#send-{{ dialogue.user }}").bind('click',function(){
+            var message=$("#message-{{ dialogue.user }}").val();
+            var sender_name="{{ request.session.userName }}";
+            var receiver_name="{{ dialogue.user }}";
+            // 发送post请求给后端,传递上述参数
+            $.post("{% url 'friends:send_message' %}",{"send_name": sender_name,"receiver_name": receiver_name,"message": message},function(res){
+                
+                 $("#dialogue-{{ dialogue.user }}").click();
+            })
+        })
+
+    </script>
+
+
+    {% empty %}
+    你还没有聊天记录
+    {% endfor %}
+</body>
+
+</html>

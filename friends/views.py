@@ -1,13 +1,16 @@
+import json
+
 from django.shortcuts import render, HttpResponseRedirect, HttpResponse
 from django.http import Http404
 
 # Create your views here.
+from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
 from user.views import check_login
 from user.models import UserInfo
 from .models import *
-from django.db.models import Q
+from django.db.models import Q, F
 
 
 @check_login
@@ -20,7 +23,7 @@ def friends_list(request):
                FriendRelationship.objects.filter(username_A=username)]
     friends += [{"username": fr.username_A, "remarkName": fr.remark_name_A} for fr in
                 FriendRelationship.objects.filter(username_B=username)]
-    print(friends)
+
     return render(request, 'friends/friends_list.html', locals())
 
 
@@ -120,3 +123,72 @@ def delete_friend(request, username):
 
         except:
             return render(request, '404.html')
+
+
+@check_login
+def dialogues(request):
+    '''
+    查询出与该用户有过聊天的用户,去重后渲染出对话框
+    '''
+    user_id = request.session.get('userID')
+    user = UserInfo.objects.get(id=user_id)
+    receivers = list(map(lambda x: x.receiver, Dialogue.objects.filter(sender=user)))
+    senders = list(map(lambda x: x.sender, Dialogue.objects.filter(receiver=user)))
+    related_users = list(set(receivers + senders))
+
+    dialogues_list = []  # 定义一个空列表存需要渲染的对话框数据
+    for related_user in related_users:
+        # 根据相关用户查询出与该用户最新一条消息记录和发送时间
+        dia = Dialogue.objects.filter(
+            Q(sender=related_user) & Q(receiver=user) | Q(sender=user) & Q(receiver=related_user)).order_by(
+            '-send_time')[0]
+        dialogues_list.append({
+            "user": related_user,
+            "message": dia.message,
+            "send_time": dia.send_time,
+
+        })
+
+    return render(request, 'friends/dialogues.html', context={'dialogues': dialogues_list})
+
+
+@check_login
+def detail_dialogues(request):
+    '''
+    查询出这两个用户之间的所有对话
+    按时间排序渲染在对话框中
+    '''
+    try:
+        user = UserInfo.objects.get(username=request.session.get('userName'))
+        related_user = UserInfo.objects.get(username=request.GET.get('username'))
+
+        dialogue_objects = Dialogue.objects.filter(
+            Q(sender=related_user) & Q(receiver=user) | Q(sender=user) & Q(receiver=related_user)).order_by(
+            'send_time')
+        dialogues_list = []
+        for dialogue_object in dialogue_objects:
+            dialogues_list.append({
+                "username": dialogue_object.sender.username,
+                "message": dialogue_object.message,
+                "send_time": str(dialogue_object.send_time),
+            })
+        print(json.dumps(dialogues_list))
+        return HttpResponse(json.dumps(dialogues_list))
+    except:
+        return render(request, '404.html')
+
+
+# @check_login
+@csrf_exempt
+def send_message(request):
+    '''
+    接受ajax请求,存储发送过来的ajax对话数据
+    '''
+    sender_name = request.POST.get("send_name")
+    receiver_name = request.POST.get("receiver_name")
+    sender = UserInfo.objects.get(username=sender_name)
+    receiver = UserInfo.objects.get(username=receiver_name)
+    message = request.POST.get("message")
+    Dialogue.objects.create(sender=sender, receiver=receiver, message=message)
+    return HttpResponse(200)
+# TODO:解决csrf_exempt装饰的视图函数的跨站请求伪造问题

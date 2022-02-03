@@ -54,8 +54,8 @@ class ValidationMessages(models.Model):
 
 
 class Dialogue(models.Model):
-    user = models.ForeignKey(UserInfo, related_name='dialogue_user', on_delete=models.CASCADE)
-    friend = models.ForeignKey(UserInfo, related_name='dialogue_friend', on_delete=models.CASCADE)
+    sender = models.ForeignKey(UserInfo, related_name='dialogue_user', on_delete=models.CASCADE)
+    receiver = models.ForeignKey(UserInfo, related_name='dialogue_friend', on_delete=models.CASCADE)
     message = models.TextField(verbose_name='消息')
     send_time = models.DateTimeField(verbose_name='发送时间', auto_now_add=True)
     '''
@@ -67,4 +67,4 @@ class Dialogue(models.Model):
     '''
 
     class Meta:
-        db_table = 'messages'
+        db_table = 'dialogue'
