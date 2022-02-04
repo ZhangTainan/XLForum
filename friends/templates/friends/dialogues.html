@@ -30,7 +30,8 @@
                 <!-- 模态框头部 -->
                 <div class="modal-header">
                     <h4 class="modal-title">好友聊天框<small>({{ dialogue.user }})</small></h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" id='close-{{ dialogue.user }}'></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        id='close-{{ dialogue.user }}'></button>
                 </div>
 
                 <!-- 模态框内容 -->
@@ -50,7 +51,7 @@
     </div>
 
     <script>
-       
+
         $("#dialogue-{{ dialogue.user }}").bind("click", function () {
             // 先清空原来的数据,防止重复渲染
             $("#detail-{{ dialogue.user }}").html("");
@@ -58,36 +59,37 @@
             // 发送get请求已有对话记录
             $.get("{% url 'friends:detail_dialogues' %}", { "username": username }, function (res) {
                 var data = $.parseJSON(res);
-               
+
                 if ($.isEmptyObject(data)) {
                     $("#detail-{{ dialogue.user }}").html("<h2>还没有消息记录哦！</h2>");
                 }
                 for (i = 0; i < data.length; i++) {
-                    sender= "<span class='h5 mr-3'>" + data[i].username + "</span>";
-                    send_time= "&nbsp;&nbsp;&nbsp;&nbsp;<span class='small secondary'>" + data[i].send_time + "</span>";
+                    sender = "<span class='h5 mr-3'>" + data[i].username + "</span>";
+                    send_time = "&nbsp;&nbsp;&nbsp;&nbsp;<span class='small secondary'>" + data[i].send_time + "</span>";
 
-                    if (data[i].username==username) {
-                        message= "<div class='mt-1 mb-4 text-primary'>" + data[i].message + "</div>";
+                    if (data[i].username == username) {
+                        message = "<div class='mt-1 mb-4 text-primary'>" + data[i].message + "</div>";
                     }
-                    else{
+                    else {
                         message = "<div class='mt-1 mb-4 text-success'>" + data[i].message + "</div>";
                     }
                     // 将消息记录逐条添加到模态框内容里
                     $("#detail-{{ dialogue.user }}").append(
-                        sender+send_time+message
+                        sender + send_time + message
                     );
                 }
             });
         });
-      
-        $("#send-{{ dialogue.user }}").bind('click',function(){
-            var message=$("#message-{{ dialogue.user }}").val();
-            var sender_name="{{ request.session.userName }}";
-            var receiver_name="{{ dialogue.user }}";
+
+        $("#send-{{ dialogue.user }}").bind('click', function () {
+            var message = $("#message-{{ dialogue.user }}").val();
+            var sender_name = "{{ request.session.userName }}";
+            var receiver_name = "{{ dialogue.user }}";
             // 发送post请求给后端,传递上述参数
-            $.post("{% url 'friends:send_message' %}",{"send_name": sender_name,"receiver_name": receiver_name,"message": message},function(res){
-                
-                 $("#dialogue-{{ dialogue.user }}").click();
+            $.post("{% url 'friends:send_message' %}", { "send_name": sender_name, "receiver_name": receiver_name, "message": message }, function (res) {
+
+                $("#message-{{ dialogue.user }}").val("");
+                $("#dialogue-{{ dialogue.user }}").click();
             })
         })
 

@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    
+
     <ul>
         {% for friend in friends %}
         <li>
@@ -19,35 +19,37 @@
             <a href="{% url 'friends:delete_friend' friend.username %}"> 删除</a>
             <a class="btn btn-info" id='dialogue-{{ friend.username }}' data-bs-toggle="modal"
                 data-bs-target="#myModal-{{ friend.username }}">
-              发消息
+                发消息
             </a>
         </li>
         <div class="modal" id="myModal-{{ friend.username }}">
             <div class="modal-dialog modal-dialog-scrollable modal-l">
                 <div class="modal-content">
-        
+
                     <!-- 模态框头部 -->
                     <div class="modal-header">
-                        <h4 class="modal-title">好友聊天框<small class='text-secondary'>({{ friend.remarkName }})</small></h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" id='close-{{ friend.username }}'></button>
+                        <h4 class="modal-title">好友聊天框<small class='text-secondary'>({{ friend.remarkName }})</small>
+                        </h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            id='close-{{ friend.username }}'></button>
                     </div>
-        
+
                     <!-- 模态框内容 -->
                     <div class="modal-body" id="detail-{{ friend.username }}">
-        
+
                     </div>
-        
+
                     <!-- 模态框底部 -->
                     <div class="modal-footer">
                         <input type="text" name='message' id="message-{{ friend.username }}" class=" form-control mt-1"
                             placeholder="在此输入消息" style="width:80%;height:50px">
                         <button type="button" class="btn btn-danger" id="send-{{ friend.username }}">发送</button>
                     </div>
-        
+
                 </div>
             </div>
         </div>
-        
+
         <script>
 
             $("#dialogue-{{ friend.username }}").bind("click", function () {
@@ -83,6 +85,7 @@
                 // 发送post请求给后端,传递上述参数
                 $.post("{% url 'friends:send_message' %}", { "send_name": sender_name, "receiver_name": receiver_name, "message": message }, function (res) {
 
+                    $("#message-{{ friend.username }}").val("");
                     $("#dialogue-{{ friend.username }}").click();
                 })
             })

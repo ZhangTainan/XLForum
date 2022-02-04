@@ -152,15 +152,15 @@ def val_mes(request):
 # 增加搜索用户
 @check_login
 def search_user(request):
-    print(request.GET)
-    print(type(request.GET))
-    username=request.GET.get('username')
-    user=UserInfo.objects.get(username=username)
-    data={
-        "username":username,
-        "nickname":user.nickname,
-        "gender":'男' if user.gender=='M' else '女' ,
-        "age":user.age,
-    }
-    print(json.dumps(data,ensure_ascii=False))
-    return HttpResponse(json.dumps(data,ensure_ascii=False))
+    try:
+        username = request.GET.get('username')
+        user = UserInfo.objects.get(username=username)
+        data = {
+            "username": username,
+            "nickname": user.nickname,
+            "gender": '男' if user.gender == 'M' else '女',
+            "age": user.age,
+        }
+        return HttpResponse(json.dumps(data, ensure_ascii=False))
+    except:
+        return HttpResponse(404)

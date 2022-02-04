@@ -146,16 +146,18 @@
         $("#search-box-submit").bind("click", function () {
             var username = $("#search-box-username").val();
             $.get("{% url 'user:search_user' %}", { "username": username }, function (res) {
-                // $("user-search-container")
-                // eval(res)
-                var data = $.parseJSON(res);
-                $("#td-username").text(data.username);
-                $("#td-nickname").text(data.nickname);
-                $("#td-gender").text(data.gender);
-                $("#td-age").text(data.age);
-                $("#td-index").attr('href', "/user/information/" + data.username + '/');
-                $("#search-results-table").prop("hidden", false);
-                // console.log(data.username);
+                if (res==404) {
+                    alert("用户不存在！")
+                }
+                else{
+                    var data = $.parseJSON(res);
+                    $("#td-username").text(data.username);
+                    $("#td-nickname").text(data.nickname);
+                    $("#td-gender").text(data.gender);
+                    $("#td-age").text(data.age);
+                    $("#td-index").attr('href', "/user/information/" + data.username + '/');
+                    $("#search-results-table").prop("hidden", false);
+                }
 
             });
         });
