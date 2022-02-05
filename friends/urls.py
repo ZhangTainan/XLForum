@@ -14,4 +14,5 @@ urlpatterns = [
     path('dialogues', dialogues, name='dialogues'),
     path('detail_dialogues', detail_dialogues, name='detail_dialogues'),
     path('send_message', send_message, name='send_message'),
+    path('set_remark_name', set_remark_name, name='set_remark_name'),
 ]

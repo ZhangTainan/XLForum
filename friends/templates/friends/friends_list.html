@@ -13,15 +13,18 @@
 
     <ul>
         {% for friend in friends %}
-        <li>
-            <a href="{% url 'user:information' friend.username %}">{{ friend.username }}({{ friend.remarkName }})</a>
-            <a href="#"> 修改备注</a>
-            <a href="{% url 'friends:delete_friend' friend.username %}"> 删除</a>
-            <a class="btn btn-info" id='dialogue-{{ friend.username }}' data-bs-toggle="modal"
+        <div class="mt-3">
+            <a href="{% url 'user:information' friend.username %}" class="btn btn-success text-dark text-start w-25">{{ friend.username }}<small class="text-light">({{ friend.remarkName }})</small></a>
+            <a class="btn btn-warning w-20" data-bs-toggle="modal"
+                data-bs-target="#remark-{{ friend.username }}">
+                修改备注
+            </a>
+            <button id="delete-friend" class="btn btn-danger w-20 "> 删除</button>
+            <a class="btn btn-info w-20" id='dialogue-{{ friend.username }}' data-bs-toggle="modal"
                 data-bs-target="#myModal-{{ friend.username }}">
                 发消息
             </a>
-        </li>
+        </div>
         <div class="modal" id="myModal-{{ friend.username }}">
             <div class="modal-dialog modal-dialog-scrollable modal-l">
                 <div class="modal-content">
@@ -49,7 +52,29 @@
                 </div>
             </div>
         </div>
-
+        <div id="remark-{{ friend.username }}" class="modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+            
+                    <!-- 模态框头部 -->
+                    <div class="modal-header">
+                        <h5 class="modal-title">设置备注</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+            
+                    <!-- 模态框内容 -->
+                    <div class="modal-body">
+                        <input type="text" name="remark_name" id="remark_name_{{ friend.username }}"  class="form-control mx-auto w-50 h-100" placeholder="请输入要设置的备注名">
+                    </div>
+            
+                    <!-- 模态框底部 -->
+                    <div class="mx-auto">
+                        <button type="button" class="btn btn-primary" id="remark_name_btn_{{ friend.username }}" >设置</button>
+                    </div>
+            
+                </div>
+            </div>
+        </div>
         <script>
 
             $("#dialogue-{{ friend.username }}").bind("click", function () {
@@ -88,7 +113,30 @@
                     $("#message-{{ friend.username }}").val("");
                     $("#dialogue-{{ friend.username }}").click();
                 })
-            })
+            });
+            $("#delete-friend").bind("click", function () {
+                    if (confirm("确定删除该好友吗!")) {
+                        
+                        $.get("{% url 'friends:delete_friend' friend.username %}",function(){
+                            alert("已删除！");
+                            location.reload();
+                        });
+                      
+                    }
+                });
+            $("#remark_name_btn_{{ friend.username }}").bind("click", function(){
+                var username="{{ request.session.userName }}";
+                var friendUsername="{{ friend.username }}";
+                var remarkName=$("#remark_name_{{ friend.username }}").val();
+                alert(friendUsername);
+                $.post("{% url 'friends:set_remark_name' %}",{"username":username,"friendUsername":friendUsername,"remarkName":remarkName},function(res){
+                    if (res=="success") {
+                        alert("设置成功！");
+                        location.reload();
+                    }
+                });
+            });
+
 
         </script>
         {% empty %}

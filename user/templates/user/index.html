@@ -62,7 +62,7 @@
             <button type="button" class="btn btn-primary col-md-2" data-bs-toggle="modal" data-bs-target="#myModal">
                 搜索用户
             </button>
-            <a class="col-md-2 text-decoration-none btn btn-danger" href="#">我的文章</a>
+            <button class="col-md-2 text-decoration-none btn btn-danger" id="show-forums">我的文章</button>
 
             <!-- 模态框 -->
             <div class="modal fade" id="myModal">
@@ -122,7 +122,19 @@
         </center>
 
     </div>
-
+    <div class="container mt-5">
+        <div class="row">
+            <div id="forums" class="mx-auto bg-dark text-center text-warning w-50 border border-3 border-secondary" hidden>
+                {% for forum in forums %}
+                <p class="mt-3  text-start"><a href="{% url 'forum:detail' forum.id %}" class="btn btn-warning">{{ forum.title }}</a></p>
+                {% empty %}
+                <h3 class="text-danger">还没有写过文章哦！</h3>
+                {% endfor %}
+                <button class="btn btn-secondary" id="hide-forums">收回</button>
+            </div>
+        </div>
+    </div>
+    
     {% endblock content %}
     {% block script %}
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
@@ -146,10 +158,10 @@
         $("#search-box-submit").bind("click", function () {
             var username = $("#search-box-username").val();
             $.get("{% url 'user:search_user' %}", { "username": username }, function (res) {
-                if (res==404) {
+                if (res == 404) {
                     alert("用户不存在！")
                 }
-                else{
+                else {
                     var data = $.parseJSON(res);
                     $("#td-username").text(data.username);
                     $("#td-nickname").text(data.nickname);
@@ -161,7 +173,13 @@
 
             });
         });
-
+        // 显示我的文章列表
+        $("#show-forums").bind("click", function () {
+            $("#forums").prop("hidden", false);
+        })
+        $("#hide-forums").bind("click", function () {
+            $("#forums").prop("hidden", true);
+        })
     </script>
     {% endblock script %}
 </body>

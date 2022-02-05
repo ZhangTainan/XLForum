@@ -191,4 +191,27 @@ def send_message(request):
     message = request.POST.get("message")
     Dialogue.objects.create(sender=sender, receiver=receiver, message=message)
     return HttpResponse(200)
+
+
 # TODO:解决csrf_exempt装饰的视图函数的跨站请求伪造问题
+
+@csrf_exempt
+def set_remark_name(request):
+    data = request.POST
+    user = data.get('username')
+    friend = data.get('friendUsername')
+    remarkName = data.get('remarkName')
+    print(user,friend,remarkName)
+    try:
+        fr = FriendRelationship.objects.get(username_A=user, username_B=friend)
+        fr.remark_name_B = remarkName
+        fr.save()
+        return HttpResponse("success")
+    except:
+        try:
+            fr = FriendRelationship.objects.get(username_A=friend, username_B=user)
+            fr.remark_name_A = remarkName
+            fr.save()
+            return HttpResponse("success")
+        except:
+            return HttpResponse(404)

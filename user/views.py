@@ -1,6 +1,9 @@
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect
 import json
 # Create your views here.
+from django.views.decorators.csrf import csrf_exempt
+
+from forum.models import Forum
 from .models import UserInfo
 from hashlib import md5
 from friends.models import *
@@ -78,6 +81,7 @@ def logout(request):
 def index(request):
     username = request.session['userName']
     user = UserInfo.objects.get(username=username)
+    forums= Forum.objects.filter(user=user)
     if user.gender == 'M':
         user.gender = '男'
     else:
@@ -129,6 +133,7 @@ def information(request, username):
         return HttpResponseRedirect('/user/index')
     # 把用户信息查出来返回前端
     user = UserInfo.objects.get(username=username)
+    forums = Forum.objects.filter(user=user)
     if user.gender == 'M':
         user.gender = '男'
     else:
@@ -164,3 +169,4 @@ def search_user(request):
         return HttpResponse(json.dumps(data, ensure_ascii=False))
     except:
         return HttpResponse(404)
+
