@@ -128,7 +128,6 @@
                 var username="{{ request.session.userName }}";
                 var friendUsername="{{ friend.username }}";
                 var remarkName=$("#remark_name_{{ friend.username }}").val();
-                alert(friendUsername);
                 $.post("{% url 'friends:set_remark_name' %}",{"username":username,"friendUsername":friendUsername,"remarkName":remarkName},function(res){
                     if (res=="success") {
                         alert("设置成功！");

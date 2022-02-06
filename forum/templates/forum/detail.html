@@ -1,27 +1,68 @@
 <!DOCTYPE html>
 <html lang="zh-hans">
+
 <head>
     <meta charset="UTF-8">
     <title>{{ title }}</title>
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
 </head>
-<body>
-<ul>
-    <li><h3>{{ title }}</h3></li>
-    <li>{{ content }}</li>
-    <li><ol>
-        {% for comment in comments %}
-            <li>{{ comment.content }}<br>@<a href="{% url 'user:information' comment.user.username %}">{{ comment.user.nickname }}</a>&nbsp;时间:{{ comment.created_time }}</li>
-        {% empty %}
-        还没有评论快去添加吧！
-        {% endfor %}
-    </ol></li>
-    <li><a href="{% url 'comment:add' id %}">添加一条评论</a></li>
-    {% if is_author %}
-    <li>
-        <a href="{% url 'forum:update' id %}">修改该话题</a>
-        <a href="{% url 'forum:delete' id %}">删除该话题</a>
-    </li>
-    {% endif %}
-</ul>
+
+<body class="bg-secondary">
+    <div class="container mt-3">
+        <div class="mx-auto text-center mb-3">
+            <span class="text-dark h3 ">{{ title }}&nbsp;&nbsp;
+                <a href="#comments" class="btn btn-dark btn-sm text-warning" data-bs-toggle="collapse">展开评论区</a></span>
+        </div>
+        <div class="mx-auto w-75 alert alert-secondary p-3">
+            <div class="mb-3">
+                {{ content }}
+            </div>
+             作者:
+             <a href="{% url 'user:information' author.username %}" class="text-decoration-none">
+                @{{ author }}
+            </a>
+            <small>{{ created_time }}</small>
+        </div>
+        
+        <div id="comments" class="collapse">
+            {% for comment in comments %}
+            
+            <div class="alert alert-success mx-auto w-75 mt-3">
+                <p class="mb-2">
+                    {{ comment.content }}
+                </p>
+                <a href="{% url 'user:information' comment.user.username %}" class="text-decoration-none">
+                    @{{ comment.user.nickname }}
+                </a>
+                &nbsp;
+                <small>{{ comment.created_time }}</small>
+            </div>
+            
+            {% empty %}
+            <div class="alert alert-warning mx-auto w-75 mt-3 ">
+                <h6>还没有评论快去评论吧!</h6>
+            </div>
+            {% endfor %}
+        </div>
+       
+        <center>
+            <a href="{% url 'comment:add' id %}" class="btn btn-primary">评论</a>
+            {% if is_author %}
+            <a href="{% url 'forum:update' id %}" class="btn btn-warning">修改</a>
+            <button id="delete_forum" class="btn btn-danger">删除</button>
+            <script>
+                $("#delete_forum").bind("click", function () {
+                    if (confirm("确定删除该话题吗？")) {
+                        window.location.replace("{% url 'forum:delete' id %}");
+                    }
+                });
+            </script>
+            {% endif %}
+        </center>
+    </div>
+
 </body>
+
 </html>

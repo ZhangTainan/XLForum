@@ -4,31 +4,41 @@
 <head>
     <meta charset="UTF-8">
     <title>添加话题</title>
-    <style>
-        p {
-            text-align: center;
-        }
-
-        #title {
-            width: 200px;
-            height: 30px;
-        }
-
-        #content {
-            width: 500px;
-            height: 300px;
-        }
-    </style>
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+ 
 </head>
 
 <body>
-    <form action="{% url 'forum:add' %}" method="post">
-        <p><input id='title' type="text" name="title" maxlength="100" placeholder="请输入话题" maxlength="20"></p>
-        <p><textarea name="content" id="content" cols="30" rows="10" placeholder="在此添加内容..."></textarea></p>
-        <p><input type="submit" value="添加"></p>
+    <div id="info_box_fail" class="alert alert-danger alert-dismissible w-50 mx-auto mt-5" hidden>
+        <strong>失败!</strong> 标题和内容不能为空!
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <div class="mt-5">
+        <form action="{% url 'forum:add' %}" method="post" class="form-horizontal" id="form">
+            <div class="w-25 mx-auto mb-3"><input id='title' class="text-center form-control text-warning" type="text"
+                    name="title" maxlength="100" placeholder="请输入话题" maxlength="20"></div>
+            <div class="w-50 mx-auto"><textarea name="content" id="content" class="form-control text-success bg-dark"
+                    cols="30" rows="10" placeholder="在此添加内容..." id="content"></textarea></div>
+            <center class="mt-3"><input type="button" value="添加" id="submit_btn" class="btn btn-primary"></center>
 
-        {% csrf_token %}
-    </form>
+            {% csrf_token %}
+        </form>
+    </div>
+    <script>
+        $("#submit_btn").bind("click", function(){
+            title=$("#title").val();
+            content=$("#content").val();
+           if (title=="" || content=="") {
+               $("#info_box_fail").prop("hidden",false);
+           }
+           else {
+                alert("成功添加话题！")
+                $("#form").submit();
+           }
+        });
+    </script>
 </body>
 
 </html>

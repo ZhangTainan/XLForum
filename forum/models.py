@@ -18,4 +18,7 @@ class Forum(models.Model):
         verbose_name_plural='论坛话题'
         ordering=["-created_time"]
     def __str__(self):
-        return self.title
+        if len(self.title)<=10:
+            return self.title
+        else:
+            return self.title[:10]+"..."

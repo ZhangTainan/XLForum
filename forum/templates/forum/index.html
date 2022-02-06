@@ -12,12 +12,9 @@
     background-image: url("{% static 'imgs/forum.png' %}");
     {% endblock bgimg %}
     {% block style %}
-    <style>
-        #forum_content {
-            margin-top: 70px;
-            margin: 0 auto;
-        }
-    </style>
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
     {% endblock style %}
 
 </head>
@@ -25,11 +22,18 @@
 <body>
     {% block content %}
     <br><br><br><br><br><br>
-    <center><em><strong>欢迎来到西林论坛！</strong></em>&nbsp;&nbsp;&nbsp;
-        <a href="{% url 'forum:add' %}">添加话题</a>
+    <center>
+        <h4>
+            <em>
+                <strong>欢迎来到西林论坛！</strong>
+            </em>
+            &nbsp;&nbsp;&nbsp;
+            <a href="{% url 'forum:add' %}" class="btn btn-primary" data-bs-toggle="tooltip" title="点击添加话题">添加话题</a>
+        </h4>
+
     </center>
-    <table id="forum_content">
-        <tr>
+    <table class="table table-striped table-bordered table-hover w-75 mx-auto">
+        <tr class="text-center">
             <th>话题</th>
             <th>发布者</th>
             <th>发布时间</th>
@@ -37,10 +41,16 @@
         </tr>
         {% for item in items %}
         <tr>
-            <td><a href="{% url 'forum:detail' item.id %}">{{ item.title }}</a></td>
-            <td><a href="{% url 'user:information' item.user.username %}">{{ item.user.nickname }}</a></td>
-            <td>{{ item.created_time }}</td>
-            <td>{{ item.updated_time }}</td>
+            <td>
+                <a href="{% url 'forum:detail' item.id %}" class="text-decoration-none" data-bs-toggle="tooltip" title="点击查看详情">{{ item }}</a>
+            </td>
+            <td class="text-center">
+                <a href="{% url 'user:information' item.user.username %}" class="text-decoration-none" data-bs-toggle="tooltip" title="点击去往主页">
+                    {{ item.user.nickname }}
+                </a>
+            </td>
+            <td class="text-center"><small>{{ item.created_time }}</small></td>
+            <td class="text-center"><small>{{ item.updated_time }}</small></td>
         </tr>
         {% empty %}
         <tr>

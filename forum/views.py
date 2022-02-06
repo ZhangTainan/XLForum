@@ -20,6 +20,7 @@ def detail(request, title_id):
         return Http404
     id = item.id
     title = item.title
+    author = item.user
     content = item.content
     created_time = item.created_time
     updated_time = item.updated_time
@@ -42,7 +43,7 @@ def update(request, title_id):
         item.content = request.POST.get('content')
         # item.created_time=
         item.save()
-        return HttpResponseRedirect(f'/forum/detail/{item.id}')
+        return HttpResponseRedirect(f'/forum/detail/{item.id}/')
 
 
 @check_login
@@ -56,12 +57,6 @@ def add(request):
         content = data.get('content')
         Forum.objects.create(user=user, title=title, content=content)
         return HttpResponseRedirect('/forum/index')
-
-
-
-
-
-
 
 
 @check_login
