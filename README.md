@@ -1,4 +1,4 @@
-# [XLForum 西林吧](http://120.25.123.183/)
+# [XLForum 西林吧](http://www.programerzhang.cn/)
 
 项目介绍：
 **西林吧** 是基于django的一个web平台，
